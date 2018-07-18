@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import DisplayApiResults from './DisplayApiResults'
 import SavedInsultsList from './SavedInsultsList'
 import InsultApiForm from './InsultApiForm'
+import EmailForm from './EmailForm'
+import DisplayEmails from './DisplayEmails'
+
 import endpoints from '../endpoints'
 
 class App extends Component {
@@ -11,22 +14,35 @@ class App extends Component {
     this.state = {
       apiResponse: '',
       savedInsultArray: [],
+      savedEmailsArray: [],
     }
   }
 
   saveInsultToArray = () => {
     let newArrayElement = [...this.state.savedInsultArray, this.state.apiResponse]
-    console.log(newArrayElement)
     this.setState({
       savedInsultArray: newArrayElement
     })
+  }
+
+  saveEmailToArray2 = (emailFormState) => {
+    let newArrayElement = [...this.state.savedEmailsArray, emailFormState]
+    this.setState({
+      savedEmailsArray: newArrayElement
+    })
+  }
+
+
+  saveEmailToArray = (event, emailFormState) => {
+    event.preventDefault()
+    this.saveEmailToArray2(emailFormState)
   }
 
    saveResponse = (response) => {
     this.setState({
       apiResponse: response
     })
-   } 
+   }
 
    clearApiResponse = () => {
      this.setState({
@@ -50,16 +66,30 @@ class App extends Component {
      }
      fetch(namedUrl, configObj).then(resp => resp.json()).then(this.saveResponse)
    }
-  
+
   render() {
+    console.log(this.state)
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">FUCK OFF</h1>
         </header>
-        < InsultApiForm handleSubmitClick= {this.handleSubmitClick}/>
-        < DisplayApiResults apiResponse={this.state.apiResponse} saveInsultToArray={this.saveInsultToArray} clearApiResponse={this.clearApiResponse}/>
-        < SavedInsultsList savedArray={this.state.savedInsultArray}/>
+        < InsultApiForm
+            handleSubmitClick= {this.handleSubmitClick}
+        />
+        < DisplayApiResults
+            apiResponse={this.state.apiResponse} saveInsultToArray={this.saveInsultToArray} clearApiResponse={this.clearApiResponse}
+        />
+        < SavedInsultsList
+            savedArray={this.state.savedInsultArray}
+        />
+        < EmailForm
+            saveEmailToArray={this.saveEmailToArray}
+        />
+        < DisplayEmails
+            savedEmailsArray={this.state.savedEmailsArray}
+        />
+
       </div>
     );
   }
