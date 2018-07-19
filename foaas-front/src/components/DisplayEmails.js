@@ -6,7 +6,7 @@ export default class DisplayEmailsResults extends Component {
 
   filterCheckedInsults = () => {
     const filtered = this.props.savedArray.filter( (insult) => insult.checkbox === true )
-    return filtered.map( (insult) => `${insult.message} ${insult.subtitle}`).join(", ")
+    return filtered.map( (insult) => `${insult.message} ${insult.subtitle}`).join(" // ")
   }
 
   buildList = () => {
