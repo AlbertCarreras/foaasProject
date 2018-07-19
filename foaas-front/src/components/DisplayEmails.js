@@ -4,12 +4,17 @@ import UUID from 'uuid'
 
 export default class DisplayEmailsResults extends Component {
 
+  filterCheckedInsults = () => {
+    const filtered = this.props.savedArray.filter( (insult) => insult.checkbox === true )
+    return filtered.map( (insult) => `${insult.message} ${insult.subtitle}`).join(", ")
+  }
+
   buildList = () => {
      return this.props.savedEmailsArray.map((emailItem) => {
          return (
          <li key={UUID()}>
            <a href={`mailto:${emailItem.formEmailField}?subject=${emailItem.formNameField}, you got a message
-             &body=Pending`}>{emailItem.formNameField}</a>
+             &body=${this.filterCheckedInsults()}`}>{emailItem.formNameField}</a>
          </li>
        )
       })

@@ -4,6 +4,7 @@ import SavedInsultsList from './SavedInsultsList'
 import InsultApiForm from './InsultApiForm'
 import EmailForm from './EmailForm'
 import DisplayEmails from './DisplayEmails'
+import UUID from 'uuid'
 
 import endpoints from '../endpoints'
 
@@ -39,8 +40,14 @@ class App extends Component {
   }
 
    saveResponse = (response) => {
+    let newResponse = {
+      message: response.message,
+      subtitle: response.subtitle,
+      key: UUID(),
+      checkbox: false,
+    }
     this.setState({
-      apiResponse: response
+      apiResponse: newResponse
     })
    }
 
@@ -67,8 +74,22 @@ class App extends Component {
      fetch(namedUrl, configObj).then(resp => resp.json()).then(this.saveResponse)
    }
 
+   updateCheckbox = (event) => {
+     event.preventDefault()
+     let newArray = [...this.state.savedInsultArray]
+     let mappedArray = newArray.map((element) => {
+        if(element.key === event.target.dataset.key) {
+          element.checkbox = !element.checkbox;
+          return element;
+        }
+        return element;
+      });
+     this.setState({
+       savedInsultArray: mappedArray,
+     })
+   }
+
   render() {
-    console.log(this.state)
     return (
       <div className="App">
         <header className="App-header">
@@ -82,12 +103,14 @@ class App extends Component {
         />
         < SavedInsultsList
             savedArray={this.state.savedInsultArray}
+            updateCheckbox={this.updateCheckbox}
         />
         < EmailForm
             saveEmailToArray={this.saveEmailToArray}
         />
         < DisplayEmails
             savedEmailsArray={this.state.savedEmailsArray}
+            savedArray={this.state.savedInsultArray}
         />
 
       </div>
